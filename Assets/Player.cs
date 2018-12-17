@@ -12,8 +12,10 @@ public class Player : MonoBehaviour {
     public bool moveForward = false;
     public bool moveBackward = false;
 
+    public float globalPitch = 0.5f;
     public GameObject[] allFriends;
     private int friendIndex = 0;
+    private int i;
 
     public AudioSource sonar;
 
@@ -27,9 +29,14 @@ public class Player : MonoBehaviour {
     }
 
 
-    public void SilenceFriends() {
+    public void SetupFriends() {
+        i = 1;
         foreach (GameObject friend in allFriends) {
             friend.GetComponent<AudioSource>().volume = 0f;
+
+            // Harmonic pitches
+            friend.GetComponent<AudioSource>().pitch = globalPitch * i;
+            i += 1;
         }
     }
 
@@ -40,7 +47,7 @@ public class Player : MonoBehaviour {
 
 
     void Start () {
-        SilenceFriends();
+        SetupFriends();
         TriggerFriend();
 
         Input.gyro.enabled = true;
