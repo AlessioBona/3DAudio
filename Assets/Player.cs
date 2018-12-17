@@ -12,7 +12,8 @@ public class Player : MonoBehaviour {
     public bool moveForward = false;
     public bool moveBackward = false;
 
-    //public GameObject[] otherFriends;
+    public GameObject[] allFriends;
+    private int friendIndex = 0;
 
     public AudioSource sonar;
 
@@ -23,17 +24,35 @@ public class Player : MonoBehaviour {
     private void Awake()
     {
         sonar = GetComponentInChildren<AudioSource>();
-        //foreach(GameObject friend in otherFriends)
-        //{
-        //    friend.GetComponent<AudioSource>().volume = 0f;
-        //}
     }
 
-    // Use this for initialization
+
+    public void SilenceFriends() {
+        foreach (GameObject friend in allFriends) {
+            friend.GetComponent<AudioSource>().volume = 0f;
+        }
+    }
+
+    public void TriggerFriend() {
+        allFriends[friendIndex].GetComponent<AudioSource>().volume = 1f;
+        friendIndex += 1;
+    }
+
+
     void Start () {
+        SilenceFriends();
+        TriggerFriend();
+
         Input.gyro.enabled = true;
         rb = GetComponent<Rigidbody>();
     }
+
+    private void OnTriggerEnter(Collider other) {
+        if (other.gameObject.transform.parent.name == allFriends[friendIndex - 1].name) {
+            TriggerFriend();
+        }
+    }
+
 
     private void Update()
     {
@@ -60,7 +79,6 @@ public class Player : MonoBehaviour {
                 {
                     newConstant = .7f;
                 }
-                Debug.Log(newConstant);
 
                 sonar.pitch = (sonarMaxPitch / sonarReach) * (sonarReach - hitDistance) * 0.5f + sonarMaxPitch * (1f / newConstant);
 
@@ -157,51 +175,50 @@ public class Player : MonoBehaviour {
     public void WalkBackward()
     {
         gameObject.transform.Translate(-Vector3.forward * walkSpeed * Time.deltaTime);
-        Debug.Log("back");
     }
 
 
-    private void OnTriggerEnter(Collider other)
-    {
-        switch (other.gameObject.transform.parent.name)
-        {
-            case "Jeremy":
-                Debug.Log(other.gameObject.transform.parent.name);
-                if (!GetComponentInChildren<AudioSource>().isPlaying)
-                {
-                    GetComponentInChildren<AudioSource>().Play();
-                }
-                break;
-            default:
-                break;
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    switch (other.gameObject.transform.parent.name)
+    //    {
+    //        case "Jeremy":
+    //            Debug.Log(other.gameObject.transform.parent.name);
+    //            if (!GetComponentInChildren<AudioSource>().isPlaying)
+    //            {
+    //                GetComponentInChildren<AudioSource>().Play();
+    //            }
+    //            break;
+    //        default:
+    //            break;
 
-        }
+    //    }
 
-        //switch (other.gameObject.transform.parent.name)
-        //{
-        //    case "Jeremy":
-        //        Debug.Log(other.gameObject.transform.parent.name);
-        //        otherFriends[0].GetComponent<AudioSource>().volume = 1f;
-        //        break;
-        //    case "Luis":
-        //        Debug.Log(other.gameObject.transform.parent.name);
-        //        otherFriends[1].GetComponent<AudioSource>().volume = 1f;
-        //        break;
-        //    case "TinkerBell":
-        //        Debug.Log(other.gameObject.transform.parent.name);
-        //        otherFriends[2].GetComponent<AudioSource>().volume = 1f;
-        //        break;
-        //    case "Karl":
-        //        Debug.Log(other.gameObject.transform.parent.name);
-        //        if (!GetComponentInChildren<AudioSource>().isPlaying)
-        //        {
-        //            GetComponentInChildren<AudioSource>().Play();
-        //        }
-        //        break;
-        //    default:
-        //        break;
+    //    //switch (other.gameObject.transform.parent.name)
+    //    //{
+    //    //    case "Jeremy":
+    //    //        Debug.Log(other.gameObject.transform.parent.name);
+    //    //        otherFriends[0].GetComponent<AudioSource>().volume = 1f;
+    //    //        break;
+    //    //    case "Luis":
+    //    //        Debug.Log(other.gameObject.transform.parent.name);
+    //    //        otherFriends[1].GetComponent<AudioSource>().volume = 1f;
+    //    //        break;
+    //    //    case "TinkerBell":
+    //    //        Debug.Log(other.gameObject.transform.parent.name);
+    //    //        otherFriends[2].GetComponent<AudioSource>().volume = 1f;
+    //    //        break;
+    //    //    case "Karl":
+    //    //        Debug.Log(other.gameObject.transform.parent.name);
+    //    //        if (!GetComponentInChildren<AudioSource>().isPlaying)
+    //    //        {
+    //    //            GetComponentInChildren<AudioSource>().Play();
+    //    //        }
+    //    //        break;
+    //    //    default:
+    //    //        break;
 
-        //}
-    }
+    //    //}
+    //}
 
     }
