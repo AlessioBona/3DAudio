@@ -35,6 +35,7 @@ public class Sonar : MonoBehaviour
     {
         if (sonarOn && sonarTime >= sonarDelay && hitMaterial != SonarMaterials.none)
         {
+            discreteSonarSource.clip = materialClips[(int)hitMaterial];
             discreteSonarSource.Play();
             sonarTime = 0f;
         }
@@ -114,8 +115,10 @@ public class Sonar : MonoBehaviour
 
     private void changeMaterial(SonarMaterials material)
     {
+
         hitMaterial = material;
-        discreteSonarSource.clip = materialClips[(int)material]; 
+        sonarTime = sonarDelay - 0.01f;
+
     }
 
 
