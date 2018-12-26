@@ -14,7 +14,7 @@ public class Player : MonoBehaviour {
 
     //public GameObject[] otherFriends;
 
-    public AudioSource sonar;
+    public Sonar sonar;
 
     Vector3 rotation = new Vector3(0f, 0f, 0f);
     float zAngle = 0;
@@ -22,7 +22,7 @@ public class Player : MonoBehaviour {
 
     private void Awake()
     {
-        sonar = GetComponentInChildren<AudioSource>();
+        sonar = GetComponentInChildren<Sonar>();
         //foreach(GameObject friend in otherFriends)
         //{
         //    friend.GetComponent<AudioSource>().volume = 0f;
@@ -37,42 +37,9 @@ public class Player : MonoBehaviour {
 
     private void Update()
     {
-        Sonar();
+        sonar.Play();
     }
 
-    public float sonarReach = 80f;
-    public float sonarMinPitch = 0.01f;
-    public float sonarMaxPitch = 0.5f;
-
-    private void Sonar()
-    {
-        RaycastHit hit;
-        Debug.DrawRay(transform.position, transform.forward*10, Color.green);
-        if(Physics.Raycast(transform.position, transform.forward, out hit, sonarReach))
-        {
-            if(hit.transform.tag == "Wall")
-            {
-                
-                Vector3 hitPoint = hit.point;
-                float hitDistance = Vector3.Distance(hitPoint, transform.position);
-                float newConstant = Mathf.Log(hitDistance, 2);
-                if (newConstant < .7f)
-                {
-                    newConstant = .7f;
-                }
-                Debug.Log(newConstant);
-
-                sonar.pitch = (sonarMaxPitch / sonarReach) * (sonarReach - hitDistance) * 0.5f + sonarMaxPitch * (1f / newConstant);
-
-
-            }
-            
-        }
-        else
-        {
-            sonar.pitch = sonarMinPitch;
-        }
-    }
 
 
     void UpdateRotation()
