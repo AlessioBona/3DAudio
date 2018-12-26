@@ -130,18 +130,21 @@ public class Player : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        switch (other.gameObject.transform.parent.name)
+        if (other.gameObject.transform.parent)
         {
-            case "Jeremy":
-                Debug.Log(other.gameObject.transform.parent.name);
-                if (!GetComponentInChildren<AudioSource>().isPlaying)
-                {
-                    GetComponentInChildren<AudioSource>().Play();
-                }
-                break;
-            default:
-                break;
+            switch (other.gameObject.transform.parent.name)
+            {
+                case "Jeremy":
+                    Debug.Log(other.gameObject.transform.parent.name);
+                    if (!GetComponentInChildren<AudioSource>().isPlaying)
+                    {
+                        GetComponentInChildren<AudioSource>().Play();
+                    }
+                    break;
+                default:
+                    break;
 
+            }
         }
 
         //switch (other.gameObject.transform.parent.name)

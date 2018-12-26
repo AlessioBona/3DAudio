@@ -54,12 +54,15 @@ public class Sonar : MonoBehaviour
     public float sonarDelay = 1f;
     private float sonarTime = 0f;
 
+    [SerializeField]
+    LayerMask layerMask;
+
     public void CastRay()
     {
         RaycastHit hit;
         Debug.DrawRay(transform.position, transform.forward * 10, Color.green);
 
-        if (Physics.Raycast(transform.position, transform.forward, out hit, sonarReach))
+        if (Physics.Raycast(transform.position, transform.forward, out hit, sonarReach, layerMask))
         {
             //if (hit.transform.tag == "Wall")
             //{
@@ -82,11 +85,11 @@ public class Sonar : MonoBehaviour
             {
                 SonarObject sonarObject = hit.transform.parent.GetComponent<SonarObject>();
 
-                Debug.Log((int)sonarObject.material);
+                //Debug.Log((int)sonarObject.material);
 
                 Vector3 hitPoint = hit.point;
                 hitDistance = Vector3.Distance(hitPoint, transform.position);
-                Debug.Log(hitDistance);
+                //Debug.Log(hitDistance);
                 changeSonarDelay(hitDistance);
 
                 if (sonarObject.material != hitMaterial)
