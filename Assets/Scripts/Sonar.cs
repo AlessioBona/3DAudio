@@ -27,7 +27,7 @@ public class Sonar : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        StartCoroutine(PlaySonar());
+
     }
 
     // Update is called once per frame
@@ -41,6 +41,7 @@ public class Sonar : MonoBehaviour
         if (sonarOn)
         {
             discreteSonarSource.Play();
+            changeSonarDelay(hitDistance);
         }
         yield return new WaitForSeconds(sonarDelay);
         StartCoroutine(PlaySonar());
@@ -85,12 +86,18 @@ public class Sonar : MonoBehaviour
 
                 Vector3 hitPoint = hit.point;
                 hitDistance = Vector3.Distance(hitPoint, transform.position);
+                Debug.Log(hitDistance);
 
                 if (sonarObject.material != hitMaterial)
                 {
                     changeMaterial(sonarObject.material);
                 }
+            } else
+            {
+                StopAllCoroutines();
+                hitMaterial = SonarMaterials.none;
             }
+
 
         }
 
@@ -98,6 +105,11 @@ public class Sonar : MonoBehaviour
         //{
         //    sonarSource.pitch = sonarMinPitch;
         //}
+    }
+
+    private void changeSonarDelay(float hitDistance)
+    {
+        sonarDelay = 0.2f * hitDistance;
     }
 
     private void changeMaterial(SonarMaterials material)

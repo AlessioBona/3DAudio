@@ -1,7 +1,7 @@
 ﻿public enum SonarMaterials
 {
+    none,
     one,
     two,
-    three,
-    forth
+    three
 }
