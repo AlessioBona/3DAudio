@@ -33,19 +33,17 @@ public class Sonar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-    }
-
-    IEnumerator PlaySonar()
-    {
-        if (sonarOn)
+        if (sonarOn && sonarTime >= sonarDelay && hitMaterial != SonarMaterials.none)
         {
             discreteSonarSource.Play();
-            changeSonarDelay(hitDistance);
+            sonarTime = 0f;
         }
-        yield return new WaitForSeconds(sonarDelay);
-        StartCoroutine(PlaySonar());
+        else
+        {
+            sonarTime += Time.deltaTime;
+        }
     }
+
 
 
     public float sonarReach = 120f;
@@ -53,6 +51,7 @@ public class Sonar : MonoBehaviour
     public float sonarMaxPitch = 0.6f;
     private bool sonarOn;
     public float sonarDelay = 1f;
+    private float sonarTime = 0f;
 
     public void CastRay()
     {
@@ -87,6 +86,7 @@ public class Sonar : MonoBehaviour
                 Vector3 hitPoint = hit.point;
                 hitDistance = Vector3.Distance(hitPoint, transform.position);
                 Debug.Log(hitDistance);
+                changeSonarDelay(hitDistance);
 
                 if (sonarObject.material != hitMaterial)
                 {
@@ -94,7 +94,7 @@ public class Sonar : MonoBehaviour
                 }
             } else
             {
-                StopAllCoroutines();
+
                 hitMaterial = SonarMaterials.none;
             }
 
@@ -109,16 +109,13 @@ public class Sonar : MonoBehaviour
 
     private void changeSonarDelay(float hitDistance)
     {
-        sonarDelay = 0.2f * hitDistance;
+        sonarDelay = 0.1f * hitDistance;
     }
 
     private void changeMaterial(SonarMaterials material)
     {
-        StopAllCoroutines();
         hitMaterial = material;
-        discreteSonarSource.clip = materialClips[(int)material];
-        StartCoroutine(PlaySonar());
-        
+        discreteSonarSource.clip = materialClips[(int)material]; 
     }
 
 
