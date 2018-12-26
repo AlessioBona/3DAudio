@@ -37,7 +37,7 @@ public class Player : MonoBehaviour {
 
     private void Update()
     {
-        sonar.Play();
+        sonar.CastRay();
     }
 
 

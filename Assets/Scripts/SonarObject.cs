@@ -5,5 +5,5 @@ using UnityEngine;
 public class SonarObject : MonoBehaviour {
 
     [SerializeField]
-    SonarMaterials material;
+    public SonarMaterials material;
 }
